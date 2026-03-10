@@ -1,0 +1,53 @@
+@Metadata.layer: #CUSTOMER
+@UI: {
+  headerInfo: { 
+    typeName: 'Booking', 
+    typeNamePlural: 'Bookings',
+    title: { type: #STANDARD, value: 'BookingID' },
+    description: { type: #STANDARD, value: 'CustomerName' }
+  }
+}
+annotate view ZC_TAXIBOOKING_083 with 
+{
+  /* --- LAYOUT: TABS --- */
+  @UI.facet: [
+    { id: 'BookingDetails', purpose: #STANDARD, type: #IDENTIFICATION_REFERENCE, label: 'Booking Details', position: 10 },
+    { id: 'TripInfo',       purpose: #STANDARD, type: #FIELDGROUP_REFERENCE,    label: 'Trip Info',       position: 20, targetQualifier: 'TripGroup' }
+  ]
+
+  /* --- MERGED STATUS ANNOTATIONS (Fixes the Duplicate Error) --- */
+  @UI: { 
+    // All List Report entries (Text + 3 Buttons) go here
+    lineItem: [ 
+      { position: 60, criticality: 'StatusCriticality', label: 'Status', importance: #HIGH },
+      { type: #FOR_ACTION, dataAction: 'assignDriver', label: 'Assign Driver', iconUrl: 'sap-icon://person-placeholder' },
+      { type: #FOR_ACTION, dataAction: 'startTrip',    label: 'Start Trip',    iconUrl: 'sap-icon://play' },
+      { type: #FOR_ACTION, dataAction: 'completeTrip', label: 'Complete Trip', iconUrl: 'sap-icon://accept' } 
+    ],
+    
+    // All Object Page Header entries (Text + 3 Buttons) go here
+    identification: [ 
+      { position: 60, criticality: 'StatusCriticality', label: 'Status' },
+      { type: #FOR_ACTION, dataAction: 'assignDriver', label: 'Assign Driver', iconUrl: 'sap-icon://person-placeholder' },
+      { type: #FOR_ACTION, dataAction: 'startTrip',    label: 'Start Trip',    iconUrl: 'sap-icon://play' },
+      { type: #FOR_ACTION, dataAction: 'completeTrip', label: 'Complete Trip', iconUrl: 'sap-icon://accept' }
+    ]
+  }
+  Status;
+
+  /* --- OTHER FIELDS --- */
+  @UI.identification: [ { position: 10, label: 'Booking No.' } ]
+  BookingID;
+
+  @UI.identification: [ { position: 20, label: 'Customer Name' } ]
+  CustomerName;
+
+  @UI.fieldGroup: [{ qualifier: 'TripGroup', position: 10, label: 'Driver ID' }]
+  DriverId;
+
+  @UI.fieldGroup: [{ qualifier: 'TripGroup', position: 20, label: 'Vehicle Number' }]
+  VehicleNumber;
+
+  @UI.fieldGroup: [{ qualifier: 'TripGroup', position: 30, label: 'Fare' }]
+  FareAmount;
+}

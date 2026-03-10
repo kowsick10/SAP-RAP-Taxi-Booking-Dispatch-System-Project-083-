@@ -1,0 +1,22 @@
+projection;
+strict ( 2 );
+use draft; // 1. Enable draft in the projection layer
+
+define behavior for ZC_TAXIBOOKING_083 alias TaxiBooking
+{
+  use create;
+  use update;
+  use delete;
+
+  // 2. Expose standard Draft actions to the UI
+  use action Edit;
+  use action Activate;
+  use action Discard;
+  use action Resume;
+  use action Prepare;
+
+  // 3. Keep your custom actions
+  use action assignDriver;
+  use action startTrip;
+  use action completeTrip;
+}

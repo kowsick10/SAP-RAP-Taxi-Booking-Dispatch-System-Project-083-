@@ -1,0 +1,49 @@
+@Metadata.layer: #CUSTOMER
+@UI: {
+  headerInfo: { 
+    typeName: 'Driver', 
+    typeNamePlural: 'Drivers',
+    title: { type: #STANDARD, value: 'DriverName' },
+    description: { type: #STANDARD, value: 'DriverId' }
+  },
+  presentationVariant: [{ sortOrder: [{ by: 'DriverId', direction: #ASC }] }]
+}
+annotate view ZC_TAXIDRIVER_083 with 
+{
+  /* --- LAYOUT: HEADER BOXES & SECTIONS --- */
+  @UI.facet: [
+    /* 1. Status Box in Header (Top Right) */
+    { id: 'HeaderStatus',  purpose: #HEADER,   type: #DATAPOINT_REFERENCE, targetQualifier: 'StatusData', position: 10 },
+    
+    /* 2. Main Details Section */
+    { id: 'DriverDetails', purpose: #STANDARD, type: #IDENTIFICATION_REFERENCE, label: 'Driver Details', position: 10 }
+  ]
+
+  /* --- MERGED AVAILABILITY STATUS ANNOTATIONS (Fixes the error) --- */
+  @UI: { 
+    dataPoint: { title: 'Availability', criticality: 'StatusCriticality' },
+    lineItem: [ { position: 50, criticality: 'StatusCriticality', label: 'Availability', importance: #HIGH } ],
+    identification: [ { position: 50, criticality: 'StatusCriticality', label: 'Availability' } ],
+    selectionField: [ { position: 30 } ]
+  }
+  AvailabilityStatus;
+
+  /* --- OTHER FIELDS --- */
+  @UI: { lineItem:       [ { position: 10, label: 'Driver ID' } ],
+         identification: [ { position: 10, label: 'Driver ID' } ],
+         selectionField: [ { position: 10 } ] }
+  DriverId;
+
+  @UI: { lineItem:       [ { position: 20, label: 'Driver Name' } ],
+         identification: [ { position: 20, label: 'Driver Name' } ],
+         selectionField: [ { position: 20 } ] }
+  DriverName;
+
+  @UI: { lineItem:       [ { position: 30, label: 'Phone Number' } ],
+         identification: [ { position: 30, label: 'Phone Number' } ] }
+  PhoneNumber;
+
+  @UI: { lineItem:       [ { position: 40, label: 'Vehicle Number' } ],
+         identification: [ { position: 40, label: 'Vehicle Number' } ] }
+  VehicleNumber;
+}

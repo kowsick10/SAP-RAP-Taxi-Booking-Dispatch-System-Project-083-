@@ -1,0 +1,59 @@
+managed implementation in class zbp_i_taxibooking_083 unique;
+strict ( 2 );
+with draft;
+
+define behavior for ZI_TAXIBOOKING_083 alias Booking
+persistent table ztaxi_book_083
+draft table ztaxi_book_083_d
+lock master total etag LocalLastChangedAt
+authorization master ( instance )
+{
+  create;
+  update;
+  delete;
+
+  // Standard Draft Actions (Required for strict mode)
+  draft action Edit;
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Resume;
+  draft determine action Prepare;
+
+  // --- FIELD CONTROL ---
+  field ( readonly, numbering : managed ) BookingUuid;
+  field ( readonly ) BookingID, Status, LocalLastChangedAt, VehicleNumber;
+
+  // These fields will have Red Asterisks (*) on the UI
+  field ( mandatory ) CustomerName, PickupLocation, DropLocation, BookingDate;
+
+  // These fields are controlled by your Class logic (get_instance_features)
+  field ( features : instance ) CustomerName, PickupLocation, DriverId;
+
+  // --- DETERMINATIONS (This fixes your current error) ---
+  // This tells the framework to run your class code when a record is created
+  determination setInitialStatus on modify { create; }
+
+  // --- ACTIONS ---
+  // (features : instance) allows you to hide/show buttons in your class code
+  action ( features : instance ) assignDriver parameter ZD_ASSIGNDRIVER_083 result [1] $self;
+  action ( features : instance ) startTrip result [1] $self;
+  action ( features : instance ) completeTrip result [1] $self;
+
+  // --- MAPPING ---
+  // Links your CDS names to the Database Table columns
+  mapping for ztaxi_book_083
+  {
+    BookingUuid        = booking_uuid;
+    BookingID          = booking_id;
+    CustomerName       = customer_name;
+    PickupLocation     = pickup_location;
+    DropLocation       = drop_location;
+    DriverId           = driver_id;
+    VehicleNumber      = vehicle_number;
+    Status             = status;
+    BookingDate        = booking_date;
+    FareAmount         = fare_amount;
+    CurrencyCode       = currency_code;
+    LocalLastChangedAt = local_last_changed_at;
+  }
+}
